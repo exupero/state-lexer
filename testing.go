@@ -2,14 +2,14 @@ package lexer
 
 import "testing"
 
-func AssertStream(t *testing.T, src string, produceStream func(chan Token)) {
+func AssertStream(t *testing.T, src string, tokenize func(string) *lexer.Lexer, produceStream func(chan Token)) {
 	stream := make(chan Token)
 	go func() {
 		produceStream(stream)
 		close(stream)
 	}()
 
-	tokens := Tokenize(src)
+	tokens := tokenize(src)
 	i := 1
 	for expected := range stream {
 		actual, ok := tokens.Next()
