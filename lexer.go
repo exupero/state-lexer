@@ -2,6 +2,7 @@ package lexer
 
 import (
 	"unicode/utf8"
+	"strings"
 )
 
 const Eof = -1
@@ -52,16 +53,16 @@ func (lex *Lexer) Backup() {
 }
 
 func (lex *Lexer) Accept(valid string) bool {
-	if strings.IndexRune(valid, lex.Next()) >= 0 {
+	if strings.IndexRune(valid, lex.NextRune()) >= 0 {
 		return true
 	}
 	lex.Backup()
 	return false
 }
 
-func (lex *Lexer) AcceptRun() {
-	for strings.IndexRune(valid, lex.Next()) >= 0 {}
-	lex.backup()
+func (lex *Lexer) AcceptRun(valid string) {
+	for strings.IndexRune(valid, lex.NextRune()) >= 0 {}
+	lex.Backup()
 }
 
 func (lex *Lexer) Emit(t TokenType) {
