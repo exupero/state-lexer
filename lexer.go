@@ -71,6 +71,11 @@ func (lex *Lexer) AcceptRun(valid string) {
 	lex.Backup()
 }
 
+func (lex *Lexer) Until(stop string) {
+	for strings.IndexRune(stop, lex.NextRune()) == -1 {}
+	lex.Backup()
+}
+
 func (lex *Lexer) Emit(t TokenType) {
 	lex.tokens <- Token{t, lex.input[lex.start:lex.pos]}
 	lex.start = lex.pos
