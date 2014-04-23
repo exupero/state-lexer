@@ -51,6 +51,19 @@ func (lex *Lexer) Backup() {
 	lex.pos -= lex.width
 }
 
+func (lex *Lexer) Accept(valid string) bool {
+	if strings.IndexRune(valid, lex.Next()) >= 0 {
+		return true
+	}
+	lex.Backup()
+	return false
+}
+
+func (lex *Lexer) AcceptRun() {
+	for strings.IndexRune(valid, lex.Next()) >= 0 {}
+	lex.backup()
+}
+
 func (lex *Lexer) Emit(t TokenType) {
 	lex.tokens <- Token{t, lex.input[lex.start:lex.pos]}
 	lex.start = lex.pos
