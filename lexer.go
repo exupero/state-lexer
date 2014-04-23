@@ -52,6 +52,12 @@ func (lex *Lexer) Backup() {
 	lex.pos -= lex.width
 }
 
+func (lex *Lexer) Peek() rune {
+	r := lex.NextRune()
+	lex.Backup()
+	return r
+}
+
 func (lex *Lexer) Accept(valid string) bool {
 	if strings.IndexRune(valid, lex.NextRune()) >= 0 {
 		return true
