@@ -70,6 +70,10 @@ func (lex *Lexer) Emit(t TokenType) {
 	lex.start = lex.pos
 }
 
+func (lex *Lexer) Ignore() {
+	lex.start = lex.pos
+}
+
 func (lex *Lexer) Next() (Token, bool) {
 	t, ok := <-lex.tokens
 	return t, ok
