@@ -2,7 +2,7 @@ package lexer
 
 import "testing"
 
-func AssertStream(t *testing.T, src string, tokenize func(string) *Lexer, produceStream func(chan Token)) {
+func AssertStream(t *testing.T, tokenize func(string) *Lexer, src string, produceStream func(chan Token)) {
 	stream := make(chan Token)
 	go func() {
 		produceStream(stream)
