@@ -9,19 +9,30 @@ func AssertStream(t *testing.T, tokenize func(string) *Lexer, src string, produc
 		close(stream)
 	}()
 
-	tokens := tokenize(src)
-	i := 1
+	expecteds := []Token{}
 	for expected := range stream {
+		expecteds = append(expecteds, expected)
+	}
+
+	tokens := tokenize(src)
+	actuals := []Token{}
+	for {
 		actual, ok := tokens.Next()
 		if !ok {
-			t.Fatalf("tokenization of `%s` ended prematurely", src)
+			break
 		}
-		if actual != expected {
-			t.Errorf("tokenization of `%s` does not produce %s but rather %s (token %d)", src, expected, actual, i)
-		}
-		i++
+		actuals = append(actuals, actual)
 	}
-	if token, ok := tokens.Next(); ok {
-		t.Fatalf("tokenization of `%s` produced unexpected token %s", src, token)
+
+	for i, expected := range expecteds {
+		if actuals[i] != expected {
+			t.Fatalf(`Unexpected tokenization:
+Expected: %s
+Actual: %s
+Source:
+-------
+%s`, expecteds, actuals, src)
+			break
+		}
 	}
 }

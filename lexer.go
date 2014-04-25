@@ -1,8 +1,9 @@
 package lexer
 
 import (
-	"unicode/utf8"
+	"fmt"
 	"strings"
+	"unicode/utf8"
 )
 
 const Eof = -1
@@ -12,6 +13,10 @@ type TokenType int
 type Token struct {
 	Type TokenType
 	Value string
+}
+
+func (tok Token) String() string {
+	return fmt.Sprintf("{%d: \"%s\"}", tok.Type, strings.Replace(tok.Value, "\n", "\\n", -1))
 }
 
 type Lexer struct {
@@ -72,7 +77,15 @@ func (lex *Lexer) AcceptRun(valid string) {
 }
 
 func (lex *Lexer) Until(stop string) {
-	for strings.IndexRune(stop, lex.NextRune()) == -1 {}
+	for {
+		r := lex.NextRune()
+		if r == Eof {
+			return
+		}
+		if strings.IndexRune(stop, r) >= 0 {
+			break
+		}
+	}
 	lex.Backup()
 }
 
