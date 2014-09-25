@@ -89,6 +89,10 @@ func (lex *Lexer) Until(stop string) {
 	lex.Backup()
 }
 
+func (lex *Lexer) IsDone() bool {
+	return lex.Peek() == Eof
+}
+
 func (lex *Lexer) Emit(t TokenType) {
 	lex.tokens <- Token{t, lex.input[lex.start:lex.pos]}
 	lex.start = lex.pos
