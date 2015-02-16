@@ -12,7 +12,7 @@ exports.lexer = function(input){
   }
 
   lexer.nextChar = function(){
-    if(pos >= len(input)){
+    if(pos >= input.length){
       width = 0;
       return eof;
     }
